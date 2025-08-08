@@ -1,0 +1,337 @@
+/* ===========================
+   🧱 Baslayout och typografi
+=========================== */
+html, body {
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin: 0 0 20px;
+  color: #4e54c8;
+  text-align: center;
+}
+
+#footer-info {
+  font-size: 0.85em;
+  color: #777;
+  text-align: center;
+  margin-top: auto;
+  padding: 12px 0;
+  opacity: 0.8;
+}
+
+#app-wrapper {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* ===========================
+   🎮 Sektioner och containers
+=========================== */
+#setup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 auto 10px;
+  max-width: 500px;
+}
+
+#play-area,
+#card-container {
+  margin-bottom: 25px;
+}
+
+#card-container {
+  font-size: 1.6em;
+  background: linear-gradient(135deg, #ffffff, #eef1ff);
+  padding: 24px;
+  border: 2px solid #4e54c8;
+  border-radius: 16px;
+  display: inline-block;
+  min-height: 120px;
+  min-width: 180px;
+  box-shadow: 0 6px 12px rgba(78, 84, 200, 0.15);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* ===========================
+   ⏰ Spelartimer
+=========================== */
+#timer-container {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #333;
+  background-color: #eef1ff;
+  border: 2px solid #4e54c8;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 10px auto 20px;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(78, 84, 200, 0.1);
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+#player-timer {
+  font-weight: bold;
+  color: #2c3e50;
+  transition: color 0.3s ease;
+}
+
+#player-timer::before {
+  content: "⏰ ";
+  margin-right: 4px;
+}
+
+.timer-expired {
+  color: rgba(230, 8, 8, 0.719);
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+/* ===========================
+   🧑‍🎤 Aktiv spelare (tur)
+=========================== */
+#current-player {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.turn-label {
+  font-size: 18px;
+  color: #7f8c8d;
+  margin-right: 10px;
+}
+
+.player-name-highlight {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  display: inline-block;
+}
+
+/* ===========================
+   🃏 Kortsektion
+=========================== */
+#active-card,
+#card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ===========================
+   🎯 Gissad spelare
+=========================== */
+#guessed-label {
+  font-weight: bold;
+  margin-right: 8px;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+#guessed-player {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 2px solid #444;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 10px 0;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#guessed-player:hover {
+  background-color: #eaeaea;
+  border-color: #666;
+}
+
+/* ===========================
+   🧮 Poängtavla
+=========================== */
+#scoreboard {
+  background: linear-gradient(135deg, #ffffff, #eef1ff);
+  border: 2px solid #4e54c8;
+  border-radius: 16px;
+  padding: 15px;
+  width: 220px;
+  color: #333;
+  font-size: 1em;
+  text-align: left;
+  position: absolute;
+  right: 40px;
+  top: 100px;
+}
+
+#scoreboard h3 {
+  margin: 0 0 10px;
+  font-size: 1.2em;
+  color: #4e54c8;
+  text-align: center;
+}
+
+#score-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#score-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* ===========================
+   🌟 Aktiv spelare i scoreboard
+=========================== */
+.active-player {
+  background-color: #c7ecee;
+  border-left: 4px solid #0097e6;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #2f3640;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#round-indicator {
+  font-size: 1em;
+  font-weight: 600;
+  color: #333;
+  background-color: #f0f0f0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ===========================
+   🧩 Formelement
+=========================== */
+input[type="number"],
+input[type="text"],
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: 2px solid #4e54c8;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+input:focus {
+  outline: none;
+  border-color: #565bd3;
+  box-shadow: 0 0 5px rgba(78, 84, 200, 0.6);
+}
+
+button {
+  background-color: #4e54c8;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #5d63db;
+}
+
+.number-box {
+  width: 120px;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.input-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+
+.game-over-message {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 320px;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff, #eef1ff);
+  border: 2px solid #4e54c8;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+/* ===========================
+   📱 Mobilanpassning
+=========================== */
+@media (max-width: 600px) {
+  #app-wrapper {
+    padding: 10px;
+  }
+
+  #footer-info {
+    font-size: 0.75em;
+    padding-bottom: 8px;
+  }
+
+  #setup {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  #play-area {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 320px;
+    margin: 20px auto;
+  }
+
+  #card-container,
+  #scoreboard {
+    position: static;
+    width: 100%;
+    max-width: 320px;
+    margin: 10px auto 20px;
+    padding: 20px;
+    border: 2px solid #4e54c8;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff, #eef1ff);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+  }
+
+    button {
+    font-size: 1.1em;
+    padding: 12px;
+  }
+
+  #timer-container {
+    max-width: 320px;
+    margin: 10px auto 10px;
+    padding: 12px;
+    font-size: 1.1em;
+  }
+}
