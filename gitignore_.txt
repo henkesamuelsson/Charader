@@ -1,0 +1,6 @@
+# OS genererade filer
+.DS_Store
+Thumbs.db
+
+# Loggar
+*.log

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta charset="UTF-8">
+  <title>Charader-spelet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="app-wrapper">
+    <h1>Charader! balle</h1>
+
+    <div id="setup">
+      <div class="input-row">
+        <label for="player-count">Antal spelare:</label>
+        <input type="number" id="player-count" class="number-box" min="1" max="10">
+        <button onclick="createNameFields()">Fortsätt</button>
+      </div>
+
+      <div id="name-fields"></div>
+
+      <div class="input-row">
+        <label for="round-count">Antal rundor per spelare:</label>
+        <input type="number" id="round-count" class="number-box" min="1" value="3">
+      </div>
+
+      <div class="input-row">
+        <label for="use-timer">
+          <input type="checkbox" id="use-timer"> Använd timer (sekunder):
+        </label>
+        <input type="number" id="timer-duration" class="number-box" value="30" min="5" max="300">
+      </div>
+      
+    </div>
+
+    <div id="play-area" style="display:none;">
+      <div id="current-player">
+        <span class="turn-label">Tur:</span>
+        <span class="player-name-highlight"></span>
+      </div>
+      
+      <div id="timer-container" style="display: none;">
+        <span id="player-timer">⏱ 30</span>
+      </div>
+      
+      <div id="card-section">
+        <div id="card-container" style="display: none">
+          <p id="active-card" style="display: none">Tryck på knappen för att börja!</p>
+        </div>
+        <button id="next-card" style="display: none">Visa kort</button>
+        <button id="end-round" style="display:none;" onclick="endRound()">Avsluta runda</button>
+        <label for="guessed-player" style="display: none" id="guessed-label">Vem gissade rätt?</label>
+        <select id="guessed-player" style="display: none"></select>
+      </div>
+
+      <div id="scoreboard">
+        <h3>Poäng</h3>
+        <ul id="score-list"></ul>
+        <div id="round-indicator">Runda 1 av X</div>
+        <button id="next-player-btn" onclick="nextTurn()">Nästa spelare</button>
+      </div>
+    </div>
+
+    <footer id="footer-info">
+      Utvecklat av: Henrik &nbsp; | &nbsp; Version 0.48 Beta
+    </footer>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
