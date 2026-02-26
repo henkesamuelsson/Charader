@@ -19,11 +19,12 @@ export default function App() {
           roundsPerPlayer={gameConfig.roundsPerPlayer}
           useTimer={gameConfig.useTimer}
           timerDuration={gameConfig.timerDuration}
+          selectedThemes={gameConfig.selectedThemes}
           onRestart={() => setGameConfig(null)}
         />
       )}
 
-      <footer>Utvecklat av Henrik &nbsp;·&nbsp; v0.5 Beta</footer>
+      <footer>Utvecklat av Henrik &nbsp;·&nbsp; v1.1</footer>
     </div>
   )
 }
