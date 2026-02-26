@@ -23,7 +23,7 @@ export default function App() {
         />
       )}
 
-      <footer>Utvecklat av Henrik &nbsp;·&nbsp; v1.1</footer>
+      <footer>Utvecklat av Henrik &nbsp;·&nbsp; v0.5 Beta</footer>
     </div>
   )
 }
