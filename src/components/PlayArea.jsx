@@ -1,0 +1,173 @@
+import { useState } from 'react'
+import { cards } from '../cards.js'
+import Scoreboard from './Scoreboard.jsx'
+import Timer from './Timer.jsx'
+import GameOver from './GameOver.jsx'
+
+export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, timerDuration, onRestart }) {
+  const [players, setPlayers] = useState(initialPlayers)
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
+  const [currentRound, setCurrentRound] = useState(1)
+  const [currentCard, setCurrentCard] = useState(null)
+  const [phase, setPhase] = useState('ready') // ready | playing | awaiting-guess | gameover
+  const [awaitingGuess, setAwaitingGuess] = useState(false)
+  const [guessedPlayerIndex, setGuessedPlayerIndex] = useState(null)
+  const [timerRunning, setTimerRunning] = useState(false)
+
+  const otherPlayers = players
+    .map((p, i) => ({ ...p, index: i }))
+    .filter((_, i) => i !== currentPlayerIndex)
+
+  function handleShowCard() {
+    const randomIndex = Math.floor(Math.random() * cards.length)
+    setCurrentCard(cards[randomIndex])
+    setPhase('playing')
+    if (useTimer) setTimerRunning(true)
+  }
+
+  function handleEndRound() {
+    setTimerRunning(false)
+    if (!awaitingGuess) {
+      setAwaitingGuess(true)
+      setGuessedPlayerIndex(otherPlayers[0]?.index ?? 'none')
+      return
+    }
+    // Award points
+    const updated = players.map((p, i) => {
+      if (guessedPlayerIndex !== 'none' && i === parseInt(guessedPlayerIndex)) return { ...p, score: p.score + 3 }
+      if (i === currentPlayerIndex) return { ...p, score: p.score + 1 }
+      return p
+    })
+    setPlayers(updated)
+    setAwaitingGuess(false)
+    advanceTurn(updated)
+  }
+
+  function handleNextTurn() {
+    if (awaitingGuess) {
+      alert('Du måste bekräfta gissningen först.')
+      return
+    }
+    advanceTurn(players)
+  }
+
+  function advanceTurn(currentPlayers) {
+    let nextIndex = currentPlayerIndex + 1
+    let nextRound = currentRound
+    if (nextIndex >= currentPlayers.length) {
+      nextIndex = 0
+      nextRound = currentRound + 1
+    }
+    if (nextRound > roundsPerPlayer) {
+      setPhase('gameover')
+      return
+    }
+    setCurrentPlayerIndex(nextIndex)
+    setCurrentRound(nextRound)
+    setCurrentCard(null)
+    setPhase('ready')
+    setTimerRunning(false)
+  }
+
+  function handleTimerExpire() {
+    setTimerRunning(false)
+    // Auto-trigger end round flow
+    setAwaitingGuess(true)
+    setGuessedPlayerIndex(otherPlayers[0]?.index ?? 'none')
+    setPhase('awaiting-guess')
+  }
+
+  function handlePlayAgain() {
+    // Reset scores but keep players and settings
+    setPlayers(initialPlayers.map(p => ({ ...p, score: 0 })))
+    setCurrentPlayerIndex(0)
+    setCurrentRound(1)
+    setCurrentCard(null)
+    setPhase('ready')
+    setAwaitingGuess(false)
+    setTimerRunning(false)
+  }
+
+  if (phase === 'gameover') {
+    return (
+      <GameOver
+        players={players}
+        onRestart={onRestart}
+        onPlayAgain={handlePlayAgain}
+      />
+    )
+  }
+
+  return (
+    <div id="play-area">
+      {/* Current player banner */}
+      <div className="current-player-banner">
+        <span className="turn-label">Tur att charader</span>
+        <span className="player-name-highlight">{players[currentPlayerIndex].name}</span>
+      </div>
+
+      {/* Timer */}
+      {useTimer && (
+        <Timer
+          duration={timerDuration}
+          running={timerRunning}
+          onExpire={handleTimerExpire}
+        />
+      )}
+
+      {/* Card display */}
+      <div className="card-display">
+        {currentCard
+          ? <span className="card-word">{currentCard}</span>
+          : <span className="card-placeholder">Tryck på knappen för att se kortet</span>
+        }
+      </div>
+
+      {/* Actions */}
+      {phase === 'ready' && (
+        <button className="btn btn-primary" onClick={handleShowCard}>
+          🃏 Visa kort
+        </button>
+      )}
+
+      {(phase === 'playing') && !awaitingGuess && (
+        <button className="btn btn-secondary" onClick={handleEndRound}>
+          ✋ Avsluta runda
+        </button>
+      )}
+
+      {awaitingGuess && (
+        <div className="guess-section">
+          <label>Vem gissade rätt?</label>
+          <select
+            value={guessedPlayerIndex ?? 'none'}
+            onChange={e => setGuessedPlayerIndex(e.target.value)}
+          >
+            {otherPlayers.map(p => (
+              <option key={p.index} value={p.index}>{p.name}</option>
+            ))}
+            <option value="none">Ingen gissade rätt</option>
+          </select>
+          <button className="btn btn-primary" onClick={handleEndRound}>
+            ✓ Bekräfta
+          </button>
+        </div>
+      )}
+
+      {/* Scoreboard */}
+      <Scoreboard
+        players={players}
+        currentPlayerIndex={currentPlayerIndex}
+        currentRound={currentRound}
+        roundsPerPlayer={roundsPerPlayer}
+      />
+
+      {/* Next player */}
+      {!awaitingGuess && phase !== 'ready' && (
+        <button className="btn btn-ghost" onClick={handleNextTurn}>
+          Hoppa över → Nästa spelare
+        </button>
+      )}
+    </div>
+  )
+}
