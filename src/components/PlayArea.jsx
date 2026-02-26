@@ -35,7 +35,7 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
     // Award points
     const updated = players.map((p, i) => {
       if (guessedPlayerIndex !== 'none' && i === parseInt(guessedPlayerIndex)) return { ...p, score: p.score + 3 }
-      if (i === currentPlayerIndex) return { ...p, score: p.score + 1 }
+      if (guessedPlayerIndex !== 'none' && i === currentPlayerIndex) return { ...p, score: p.score + 1 }
       return p
     })
     setPlayers(updated)
@@ -102,7 +102,7 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
     <div id="play-area">
       {/* Current player banner */}
       <div className="current-player-banner">
-        <span className="turn-label">Tur att charader</span>
+        <span className="turn-label">Spelare:</span>
         <span className="player-name-highlight">{players[currentPlayerIndex].name}</span>
       </div>
 
