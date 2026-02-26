@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { cards } from '../cards.js'
+import { useState, useMemo } from 'react'
+import { buildCardPool } from '../cards/themes.js'
 import Scoreboard from './Scoreboard.jsx'
 import Timer from './Timer.jsx'
 import GameOver from './GameOver.jsx'
 
-export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, timerDuration, onRestart }) {
+export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, timerDuration, selectedThemes, onRestart }) {
   const [players, setPlayers] = useState(initialPlayers)
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
   const [currentRound, setCurrentRound] = useState(1)
@@ -14,13 +14,16 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
   const [guessedPlayerIndex, setGuessedPlayerIndex] = useState(null)
   const [timerRunning, setTimerRunning] = useState(false)
 
+  // Bygg kortpoolen en gång från valda teman
+  const cardPool = useMemo(() => buildCardPool(selectedThemes), [selectedThemes])
+
   const otherPlayers = players
     .map((p, i) => ({ ...p, index: i }))
     .filter((_, i) => i !== currentPlayerIndex)
 
   function handleShowCard() {
-    const randomIndex = Math.floor(Math.random() * cards.length)
-    setCurrentCard(cards[randomIndex])
+    const randomIndex = Math.floor(Math.random() * cardPool.length)
+    setCurrentCard(cardPool[randomIndex])
     setPhase('playing')
     if (useTimer) setTimerRunning(true)
   }
@@ -32,7 +35,6 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
       setGuessedPlayerIndex(otherPlayers[0]?.index ?? 'none')
       return
     }
-    // Award points
     const updated = players.map((p, i) => {
       if (guessedPlayerIndex !== 'none' && i === parseInt(guessedPlayerIndex)) return { ...p, score: p.score + 3 }
       if (guessedPlayerIndex !== 'none' && i === currentPlayerIndex) return { ...p, score: p.score + 1 }
@@ -44,24 +46,15 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
   }
 
   function handleNextTurn() {
-    if (awaitingGuess) {
-      alert('Du måste bekräfta gissningen först.')
-      return
-    }
+    if (awaitingGuess) { alert('Du måste bekräfta gissningen först.'); return }
     advanceTurn(players)
   }
 
   function advanceTurn(currentPlayers) {
     let nextIndex = currentPlayerIndex + 1
     let nextRound = currentRound
-    if (nextIndex >= currentPlayers.length) {
-      nextIndex = 0
-      nextRound = currentRound + 1
-    }
-    if (nextRound > roundsPerPlayer) {
-      setPhase('gameover')
-      return
-    }
+    if (nextIndex >= currentPlayers.length) { nextIndex = 0; nextRound = currentRound + 1 }
+    if (nextRound > roundsPerPlayer) { setPhase('gameover'); return }
     setCurrentPlayerIndex(nextIndex)
     setCurrentRound(nextRound)
     setCurrentCard(null)
@@ -71,14 +64,12 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
 
   function handleTimerExpire() {
     setTimerRunning(false)
-    // Auto-trigger end round flow
     setAwaitingGuess(true)
     setGuessedPlayerIndex(otherPlayers[0]?.index ?? 'none')
     setPhase('awaiting-guess')
   }
 
   function handlePlayAgain() {
-    // Reset scores but keep players and settings
     setPlayers(initialPlayers.map(p => ({ ...p, score: 0 })))
     setCurrentPlayerIndex(0)
     setCurrentRound(1)
@@ -89,33 +80,20 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
   }
 
   if (phase === 'gameover') {
-    return (
-      <GameOver
-        players={players}
-        onRestart={onRestart}
-        onPlayAgain={handlePlayAgain}
-      />
-    )
+    return <GameOver players={players} onRestart={onRestart} onPlayAgain={handlePlayAgain} />
   }
 
   return (
     <div id="play-area">
-      {/* Current player banner */}
       <div className="current-player-banner">
         <span className="turn-label">Spelare:</span>
         <span className="player-name-highlight">{players[currentPlayerIndex].name}</span>
       </div>
 
-      {/* Timer */}
       {useTimer && (
-        <Timer
-          duration={timerDuration}
-          running={timerRunning}
-          onExpire={handleTimerExpire}
-        />
+        <Timer duration={timerDuration} running={timerRunning} onExpire={handleTimerExpire} />
       )}
 
-      {/* Card display */}
       <div className="card-display">
         {currentCard
           ? <span className="card-word">{currentCard}</span>
@@ -123,17 +101,12 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
         }
       </div>
 
-      {/* Actions */}
       {phase === 'ready' && (
-        <button className="btn btn-primary" onClick={handleShowCard}>
-          🃏 Visa kort
-        </button>
+        <button className="btn btn-primary" onClick={handleShowCard}>🃏 Visa kort</button>
       )}
 
-      {(phase === 'playing') && !awaitingGuess && (
-        <button className="btn btn-secondary" onClick={handleEndRound}>
-          ✋ Avsluta runda
-        </button>
+      {phase === 'playing' && !awaitingGuess && (
+        <button className="btn btn-secondary" onClick={handleEndRound}>✋ Avsluta runda</button>
       )}
 
       {awaitingGuess && (
@@ -148,13 +121,10 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
             ))}
             <option value="none">Ingen gissade rätt</option>
           </select>
-          <button className="btn btn-primary" onClick={handleEndRound}>
-            ✓ Bekräfta
-          </button>
+          <button className="btn btn-primary" onClick={handleEndRound}>✓ Bekräfta</button>
         </div>
       )}
 
-      {/* Scoreboard */}
       <Scoreboard
         players={players}
         currentPlayerIndex={currentPlayerIndex}
@@ -162,11 +132,8 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
         roundsPerPlayer={roundsPerPlayer}
       />
 
-      {/* Next player */}
       {!awaitingGuess && phase !== 'ready' && (
-        <button className="btn btn-ghost" onClick={handleNextTurn}>
-          Hoppa över → Nästa spelare
-        </button>
+        <button className="btn btn-ghost" onClick={handleNextTurn}>Hoppa över → Nästa spelare</button>
       )}
     </div>
   )
