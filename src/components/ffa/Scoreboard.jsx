@@ -20,7 +20,7 @@ export default function Scoreboard({ players, currentPlayerIndex, currentRound, 
           </li>
         ))}
       </ul>
-      <span className="round-badge">Runda {currentRound} av {roundsPerPlayer}</span>
+      <span className="round-badge">Omgång {currentRound} av {roundsPerPlayer}</span>
     </div>
   )
 }

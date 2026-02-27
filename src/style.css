@@ -163,7 +163,7 @@ html, body {
 .wizard-card .hint {
   font-size: 0.85rem;
   color: var(--text-muted);
-  margin: 0 0 24px;
+  margin: 0 0 12px;
 }
 
 /* ===========================
@@ -666,6 +666,250 @@ footer {
 }
 
 /* ===========================
+   🏠 Välkomstskärm
+=========================== */
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  justify-content: center;
+}
+
+.welcome-tagline {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+.welcome-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 20px;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  font-family: inherit;
+  width: 100%;
+}
+
+.welcome-card:hover {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.welcome-card-emoji {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.welcome-card-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.welcome-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ===========================
+   🎮 Spelläge-kort (wizard steg 1)
+=========================== */
+.mode-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 18px;
+  background: var(--brand-bg-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  width: 100%;
+}
+
+.mode-card:hover {
+  border-color: var(--brand);
+  background: var(--brand-bg);
+}
+
+.mode-card-emoji { font-size: 1.8rem; margin-bottom: 2px; }
+.mode-card-title { font-size: 1.1rem; font-weight: 900; color: var(--text); }
+.mode-card-desc  { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; }
+
+/* ===========================
+   👥 Team Players Section
+=========================== */
+.team-players-section {
+  background: var(--brand-bg-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+
+.team-players-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.team-players-name {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--brand);
+}
+
+.btn-success {
+  background: #27ae60;
+  color: white;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.btn-success:hover {
+  background: #219a52;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 4px 12px rgba(232, 64, 64, 0.3);
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+/* ===========================
+   ⏱️ Team Timer Bar
+=========================== */
+.team-timer-bar-wrap {
+  background: var(--brand-bg);
+  border-radius: 50px;
+  height: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.team-timer-bar {
+  height: 100%;
+  border-radius: 50px;
+  transition: width 1s linear, background 0.3s;
+}
+
+.team-timer-number {
+  position: absolute;
+  right: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.team-timer-number.warning {
+  color: var(--danger);
+}
+
+/* ===========================
+   🎭 Handoff Screen
+=========================== */
+.handoff-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  width: 100%;
+}
+
+.handoff-emoji {
+  font-size: 2.5rem;
+}
+
+.handoff-message {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--text);
+  text-align: center;
+}
+
+.handoff-submessage {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brand);
+  text-align: center;
+}
+
+.handoff-btn {
+  margin-top: 8px;
+  width: 100%;
+}
+
+/* ===========================
+   ⏳ Penalty Countdown
+=========================== */
+.penalty-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.penalty-hourglass {
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.penalty-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--danger);
+}
+
+.penalty-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* ===========================
    🎨 Tema-väljare
 =========================== */
 .theme-select-actions {
@@ -705,32 +949,31 @@ footer {
 
 .theme-grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 8px;
 }
 
 .theme-item-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: contents;
 }
 
 .theme-chip {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 50px;
   border: 2px solid var(--border);
   background: var(--brand-bg-2);
   cursor: pointer;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text);
   transition: all 0.15s ease;
   text-align: left;
-  width: 100%;
+  white-space: nowrap;
 }
 
 .theme-chip:hover {
@@ -745,7 +988,7 @@ footer {
 }
 
 .theme-chip-emoji {
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -754,35 +997,37 @@ footer {
 }
 
 .theme-chip-arrow {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   transition: transform 0.2s ease;
-  padding: 4px 6px;
-  border-radius: 4px;
-  margin-left: auto;
-}
-
-.theme-chip-arrow:hover {
-  background: var(--border);
+  padding: 0 2px;
 }
 
 .theme-chip-arrow.open {
   transform: rotate(180deg);
 }
 
-.subcategory-grid {
+/* Underkategorier – bryt ut på egen rad under parent */
+.theme-item-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding-left: 20px;
+  gap: 6px;
+  width: 100%;
+}
+
+.subcategory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-left: 16px;
   animation: slideIn 0.2s ease;
 }
 
 .sub-chip {
-  padding: 10px 14px;
-  font-size: 0.9rem;
-  background: var(--white);
+  padding: 6px 12px;
+  font-size: 0.82rem;
   border-style: dashed;
+  border-radius: 50px;
 }
 
 .sub-chip.selected {
