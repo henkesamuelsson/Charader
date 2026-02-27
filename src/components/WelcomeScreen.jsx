@@ -2,6 +2,8 @@ export default function WelcomeScreen({ onAllaMotAlla, onLagspel }) {
   return (
     <div className="welcome-screen">
       {/* <p className="welcome-tagline">Vad vill ni spela?</p> */}
+      {/* MimeTime - ska de bli mitt nya varumärke? */}
+
 
       <div className="welcome-options">
         <button className="welcome-card" onClick={onAllaMotAlla}>

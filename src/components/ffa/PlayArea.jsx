@@ -117,15 +117,23 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
       {awaitingGuess && (
         <div className="guess-section">
           <label>Vem gissade rätt?</label>
-          <select
-            value={guessedPlayerIndex ?? 'none'}
-            onChange={e => setGuessedPlayerIndex(e.target.value)}
-          >
+          <div className="guess-player-grid">
             {otherPlayers.map(p => (
-              <option key={p.index} value={p.index}>{p.name}</option>
+              <button
+                key={p.index}
+                className={`guess-player-chip ${guessedPlayerIndex === p.index.toString() ? 'selected' : ''}`}
+                onClick={() => setGuessedPlayerIndex(p.index.toString())}
+              >
+                {p.name}
+              </button>
             ))}
-            <option value="none">Ingen gissade rätt</option>
-          </select>
+            <button
+              className={`guess-player-chip guess-player-none ${guessedPlayerIndex === 'none' ? 'selected' : ''}`}
+              onClick={() => setGuessedPlayerIndex('none')}
+            >
+              Ingen gissade rätt
+            </button>
+          </div>
           <button className="btn btn-primary" onClick={handleEndRound}>✓ Bekräfta</button>
         </div>
       )}

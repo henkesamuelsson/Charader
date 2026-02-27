@@ -338,9 +338,7 @@ html, body {
 }
 
 .timer-extra {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+  margin-top: 14px;
   animation: slideIn 0.2s ease;
 }
 
@@ -500,6 +498,47 @@ html, body {
   font-weight: 800;
   color: var(--danger);
   display: block;
+}
+
+.guess-player-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.guess-player-chip {
+  padding: 10px 16px;
+  border-radius: 50px;
+  border: 2px solid var(--border);
+  background: var(--brand-bg-2);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.guess-player-chip:active {
+  transform: scale(0.97);
+}
+
+.guess-player-chip.selected {
+  border-color: var(--brand);
+  background: var(--brand-bg);
+  color: var(--brand);
+}
+
+.guess-player-none {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+.guess-player-none.selected {
+  border-style: solid;
+  color: var(--brand);
 }
 
 /* Card */
