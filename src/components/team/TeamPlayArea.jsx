@@ -211,8 +211,7 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
       }
     }
   }
-
-  function handlePlayAgain() {
+    function handlePlayAgain() {
     setTeams(initialTeams.map(t => ({ ...t, score: 0 })))
     setCurrentRound(1)
     turnOrderRef.current = buildStandardTurnOrder(initialTeams)
@@ -309,14 +308,17 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
           <PenaltyCountdown seconds={5} onDone={handlePenaltyDone} />
         )}
         {phase === 'playing' && (
-          <span className="card-word">{currentCard}</span>
+          <>
+          <span className="card-word">{currentCard?.word}</span>
+          <span className="card-theme-label">{currentCard?.theme}</span>
+          </>
         )}
       </div>
 
       {/* Knappar */}
       {phase === 'playing' && (
         <div style={{ display: 'flex', gap: 10 }}>
-         {/* {----- TESTAR GRÖN/RÖD KNAPPAR -------  */}
+          {/* {----- TESTAR GRÖN/RÖD KNAPPAR -------  */}
           {/* <button className="btn btn-success" style={{ flex: 2 }} onClick={handleCorrect}>
             ✓ Rätt!
           </button>
@@ -326,7 +328,7 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
         
 
         {/* {----- ORIGINAL KNAPPARNA -------  */}
-        <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleCorrect}>  
+          <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleCorrect}>
             ✓ Rätt!
           </button>
           <button className="btn btn-ghost" style={{ flex: 1 }} onClick={handleSkip}>

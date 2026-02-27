@@ -551,6 +551,7 @@ html, body {
   min-height: 130px;
   display: flex;
   align-items: center;
+  position: relative;
   justify-content: center;
   box-shadow: var(--shadow-lg);
 }
@@ -1096,4 +1097,15 @@ footer {
 
 .sub-chip.selected {
   border-style: solid;
+}
+
+.card-theme-label {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
