@@ -27,8 +27,8 @@ export default function TeamSetupWizard({ onStart, onBack }) {
   const [teamCount, setTeamCount] = useState(2)
   const [teams, setTeams] = useState([])
   const [selectedThemes, setSelectedThemes] = useState(new Set(['general']))
-  const [roundCount, setRoundCount] = useState(2)
-  const [timerMinutes, setTimerMinutes] = useState(0.20)
+  const [roundCount, setRoundCount] = useState(1)
+  const [timerMinutes, setTimerMinutes] = useState(3)
 
   // Steg 1 – Spelläge
   function handleModeSelect(mode) {

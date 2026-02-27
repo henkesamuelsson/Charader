@@ -28,7 +28,7 @@ export default function SetupScreen({ onStart, onBack }) {
   const [selectedThemes, setSelectedThemes] = useState(new Set(['general']))
   const [roundCount, setRoundCount] = useState(3)
   const [useTimer, setUseTimer] = useState(false)
-  const [timerDuration, setTimerDuration] = useState(30)
+  const [timerDuration, setTimerDuration] = useState(45)
 
   function handleCountNext() {
     setNames(Array.from({ length: playerCount }, (_, i) => names[i] || ''))
