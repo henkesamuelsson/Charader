@@ -113,6 +113,7 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
 
   // === RÄTT SVAR ===
   function handleCorrect() {
+    if (navigator.vibrate) navigator.vibrate(60)
     const activeTeamIndex = gameMode === 'standard'
       ? turnOrderRef.current[turnOrderIndex].teamIndex
       : hotSeatTeamIndex
@@ -211,6 +212,16 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
     }
   }
 
+  function handlePlayAgain() {
+    setTeams(initialTeams.map(t => ({ ...t, score: 0 })))
+    setCurrentRound(1)
+    turnOrderRef.current = buildStandardTurnOrder(initialTeams)
+    setTurnOrderIndex(0)
+    setHotSeatTeamIndex(0)
+    setHotSeatCurrentPlayer(nextHotSeatPlayer(0))
+    setPhase('handoff')
+  }
+
   // === GAME OVER ===
   if (phase === 'gameover') {
     const highScore = Math.max(...teams.map(t => t.score))
@@ -228,9 +239,14 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
                 <p className="winner-score">{highScore} poäng</p></>
           }
           <div className="game-over-buttons">
-            <button className="btn btn-secondary" onClick={onRestart}>⚙️ Tillbaka till start</button>
-          </div>
+            <button className="btn btn-primary" onClick={handlePlayAgain}>
+              🔄 Kör igen! (samma lag)
+            </button>
+            <button className="btn btn-secondary" onClick={onRestart}>
+              ⚙️ Starta om (nya inställningar)
+            </button>
         </div>
+      </div>  
         <TeamScoreboard
           teams={teams}
           currentTeamIndex={-1}

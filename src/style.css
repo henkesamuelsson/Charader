@@ -208,7 +208,7 @@ html, body {
 }
 
 .stepper-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 .stepper-value {
@@ -366,6 +366,7 @@ html, body {
   transition: all 0.2s ease;
   font-family: inherit;
   display: block;
+  touch-action: manipulation;
 }
 
 .btn + .btn {
@@ -374,12 +375,17 @@ html, body {
 
 .wizard-nav {
   display: flex;
+  flex: 1;
   gap: 10px;
   margin-top: 8px;
 }
 
 .wizard-nav .btn {
   flex: 1;
+}
+
+.wizard-nav .btn + .btn {
+  margin-top: 0;
 }
 
 .btn-primary {
@@ -395,13 +401,18 @@ html, body {
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
+  background: var(--brand-dark);
 }
 
 .btn-secondary {
   background: var(--brand-bg);
   color: var(--brand);
   border: 2px solid var(--border);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
 }
 
 .btn-secondary:hover {
@@ -412,6 +423,10 @@ html, body {
   background: transparent;
   color: var(--text-muted);
   border: 2px solid var(--border);
+}
+
+.btn-ghost:active {
+  transform: scale(0.97);
 }
 
 /* ===========================
@@ -794,6 +809,11 @@ footer {
   box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
+.btn-success:active {
+  transform: scale(0.97);
+  background: #219a52;
+}
+
 .btn-success:hover {
   background: #219a52;
   transform: translateY(-1px);
@@ -803,6 +823,11 @@ footer {
   background: var(--danger);
   color: white;
   box-shadow: 0 4px 12px rgba(232, 64, 64, 0.3);
+}
+
+.btn-danger:active {
+  transform: scale(0.97);
+  background: #c0392b;
 }
 
 .btn-danger:hover {
