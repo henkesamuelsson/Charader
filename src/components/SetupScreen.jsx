@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { themes } from '../cards/themes.js'
+import ThemeStep from './ThemeStep.jsx'
 
 const STEPS = ['Spelare', 'Namn', 'Teman', 'Inställningar']
 
@@ -9,9 +9,7 @@ function ProgressBar({ currentStep }) {
       {STEPS.map((label, i) => (
         <div key={i} style={{ display: 'flex', alignItems: 'flex-start', flex: i < STEPS.length - 1 ? '1' : 'initial' }}>
           <div className={`wizard-step ${i < currentStep ? 'done' : ''} ${i === currentStep ? 'active' : ''}`}>
-            <div className="wizard-step-circle">
-              {i < currentStep ? '✓' : i + 1}
-            </div>
+            <div className="wizard-step-circle">{i < currentStep ? '✓' : i + 1}</div>
             <span className="wizard-step-label">{label}</span>
           </div>
           {i < STEPS.length - 1 && (
@@ -19,96 +17,6 @@ function ProgressBar({ currentStep }) {
           )}
         </div>
       ))}
-    </div>
-  )
-}
-
-function ThemeStep({ selected, onChange }) {
-  const [expanded, setExpanded] = useState(new Set())
-
-  function toggleTheme(id) {
-    const next = new Set(selected)
-    next.has(id) ? next.delete(id) : next.add(id)
-    onChange(next)
-  }
-
-  function toggleExpand(id) {
-    setExpanded(prev => {
-      const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
-      return next
-    })
-  }
-
-  function selectAll() {
-    const all = new Set()
-    themes.forEach(t => {
-      all.add(t.id)
-      t.subcategories?.forEach(s => all.add(s.id))
-    })
-    onChange(all)
-  }
-
-  function clearAll() { onChange(new Set()) }
-
-  const allIds = []
-  themes.forEach(t => { allIds.push(t.id); t.subcategories?.forEach(s => allIds.push(s.id)) })
-  const allSelected = allIds.every(id => selected.has(id))
-
-  return (
-    <div>
-      <div className="theme-select-actions">
-        <button className="theme-action-btn" onClick={allSelected ? clearAll : selectAll}>
-          {allSelected ? 'Rensa alla' : 'Välj alla'}
-        </button>
-        {selected.size > 0 && (
-          <span className="theme-count-badge">{selected.size} valda</span>
-        )}
-      </div>
-
-      <div className="theme-grid">
-        {themes.map(theme => {
-          const isSelected = selected.has(theme.id)
-          const isExpanded = expanded.has(theme.id)
-          const hasSubs = !!theme.subcategories?.length
-
-          return (
-            <div key={theme.id} className="theme-item-wrapper">
-              <button
-                className={`theme-chip ${isSelected ? 'selected' : ''}`}
-                onClick={() => {
-                  toggleTheme(theme.id)
-                  if (hasSubs && !isExpanded) toggleExpand(theme.id)
-                }}
-              >
-                <span className="theme-chip-emoji">{theme.emoji}</span>
-                <span className="theme-chip-label">{theme.label}</span>
-                {hasSubs && (
-                  <span
-                    className={`theme-chip-arrow ${isExpanded ? 'open' : ''}`}
-                    onClick={e => { e.stopPropagation(); toggleExpand(theme.id) }}
-                  >▾</span>
-                )}
-              </button>
-
-              {hasSubs && isExpanded && (
-                <div className="subcategory-grid">
-                  {theme.subcategories.map(sub => (
-                    <button
-                      key={sub.id}
-                      className={`theme-chip sub-chip ${selected.has(sub.id) ? 'selected' : ''}`}
-                      onClick={() => toggleTheme(sub.id)}
-                    >
-                      <span className="theme-chip-emoji">{sub.emoji}</span>
-                      <span className="theme-chip-label">{sub.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )
-        })}
-      </div>
     </div>
   )
 }
@@ -144,6 +52,7 @@ export default function SetupScreen({ onStart }) {
     <div>
       <ProgressBar currentStep={step} />
 
+      {/* Steg 1 – Antal spelare */}
       {step === 0 && (
         <div className="wizard-card">
           <h2>Hur många spelar?</h2>
@@ -155,8 +64,10 @@ export default function SetupScreen({ onStart }) {
           </div>
           <button className="btn btn-primary" onClick={handleCountNext}>Fortsätt →</button>
         </div>
+              
       )}
 
+      {/* Steg 2 – Namn */}
       {step === 1 && (
         <div className="wizard-card">
           <h2>Vad heter spelarna?</h2>
@@ -186,6 +97,7 @@ export default function SetupScreen({ onStart }) {
         </div>
       )}
 
+      {/* Steg 3 – Teman */}
       {step === 2 && (
         <div className="wizard-card">
           <h2>Välj teman</h2>
@@ -198,6 +110,7 @@ export default function SetupScreen({ onStart }) {
         </div>
       )}
 
+      {/* Steg 4 – Inställningar */}
       {step === 3 && (
         <div className="wizard-card">
           <h2>Spelinställningar</h2>

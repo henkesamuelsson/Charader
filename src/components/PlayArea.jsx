@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo } from 'react'
 import { buildCardPool } from '../cards/themes.js'
 import Scoreboard from './Scoreboard.jsx'
 import Timer from './Timer.jsx'
@@ -16,33 +16,16 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
 
   // Bygg kortpoolen en gång från valda teman
   const cardPool = useMemo(() => buildCardPool(selectedThemes), [selectedThemes])
-  const deckRef = useRef(shuffleArray(cardPool))
-  const deckIndexRef = useRef(0)
 
   const otherPlayers = players
     .map((p, i) => ({ ...p, index: i }))
     .filter((_, i) => i !== currentPlayerIndex)
 
-  function shuffleArray(array) {
-    const arr = [...array]
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-     [arr[i], arr[j]] = [arr[j], arr[i]]
-  }
-    return arr
-  }
-
   function handleShowCard() {
-  // Om vi gått igenom hela leken, blanda om
-  if (deckIndexRef.current >= deckRef.current.length) {
-    deckRef.current = shuffleArray(cardPool)
-    deckIndexRef.current = 0
-  }
-    const card = deckRef.current[deckIndexRef.current]
-    deckIndexRef.current++
-    setCurrentCard(card)
+    const randomIndex = Math.floor(Math.random() * cardPool.length)
+    setCurrentCard(cardPool[randomIndex])
     setPhase('playing')
-  if (useTimer) setTimerRunning(true)
+    if (useTimer) setTimerRunning(true)
   }
 
   function handleEndRound() {
@@ -110,7 +93,6 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
       {useTimer && (
         <Timer duration={timerDuration} running={timerRunning} onExpire={handleTimerExpire} />
       )}
-   
 
       <div className="card-display">
         {currentCard
@@ -118,7 +100,7 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
           : <span className="card-placeholder">Tryck på knappen för att se kortet</span>
         }
       </div>
-      
+
       {/* Kommentera ut nedanstående rad för att dölja "kort kvar"-räknaren */}
       {/* <div style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: -6 }}>
         {cardPool.length - deckIndexRef.current} kort kvar i leken
