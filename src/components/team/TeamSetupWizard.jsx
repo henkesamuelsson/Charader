@@ -73,7 +73,8 @@ export default function TeamSetupWizard({ onStart, onBack }) {
   function handlePlayersNext() {
     const updated = teams.map((t, ti) => ({
       ...t,
-      players: t.players.map((p, pi) => p.trim() || `${t.name || `Lag ${ti + 1}`} S${pi + 1}`)
+      players: t.players.map((p, pi) => p.trim() || `Spelare ${pi + 1}`)
+      // players: t.players.map((p, pi) => p.trim() || `${t.name || `Lag ${ti + 1}`} Spelare ${pi + 1}`) --- OLD, Försöker få bort lagnamn --
     }))
     setTeams(updated)
     setStep(3)
@@ -111,12 +112,12 @@ export default function TeamSetupWizard({ onStart, onBack }) {
             <button className="mode-card" onClick={() => handleModeSelect('standard')}>
               <span className="mode-card-emoji">⏱️</span>
               <span className="mode-card-title">Standard</span>
-              <span className="mode-card-desc">En spelare charadar per turn med egen timer. Lagen alternerar.</span>
+              <span className="mode-card-desc">En spelare visar per runda med egen timer. Lagen alternerar.</span>
             </button>
             <button className="mode-card" onClick={() => handleModeSelect('hotseat')}>
               <span className="mode-card-emoji">🔥</span>
               <span className="mode-card-title">Hot Seat</span>
-              <span className="mode-card-desc">Laget delar en timer. Byt charadör vid varje rätt svar eller skip!</span>
+              <span className="mode-card-desc">Laget delar en timer. Byt spelare vid varje rätt svar eller skip!</span>
             </button>
           </div>
 

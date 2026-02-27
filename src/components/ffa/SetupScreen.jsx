@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ThemeStep from './ThemeStep.jsx'
+import ThemeStep from '../ThemeStep.jsx'
 
 const STEPS = ['Spelare', 'Namn', 'Teman', 'Inställningar']
 
@@ -21,7 +21,7 @@ function ProgressBar({ currentStep }) {
   )
 }
 
-export default function SetupScreen({ onStart }) {
+export default function SetupScreen({ onStart, onBack }) {
   const [step, setStep] = useState(0)
   const [playerCount, setPlayerCount] = useState(3)
   const [names, setNames] = useState([])
@@ -63,6 +63,7 @@ export default function SetupScreen({ onStart }) {
             <button className="stepper-btn" onClick={() => setPlayerCount(c => Math.min(10, c + 1))}>+</button>
           </div>
           <button className="btn btn-primary" onClick={handleCountNext}>Fortsätt →</button>
+          <button className="btn btn-ghost" onClick={onBack}>← Tillbaka</button>
         </div>
               
       )}
@@ -118,8 +119,8 @@ export default function SetupScreen({ onStart }) {
 
           <div className="toggle-row">
             <div>
-              <div className="toggle-label">Rundor per spelare</div>
-              <div className="toggle-sublabel">Hur många varv var och en kör</div>
+              <div className="toggle-label">Omgång per spelare</div>
+              <div className="toggle-sublabel">Hur många omgångar var och en kör</div>
             </div>
             <div className="stepper" style={{ margin: 0, padding: '4px' }}>
               <button className="stepper-btn" style={{ width: 36, height: 36, fontSize: '1.2rem' }}
@@ -133,7 +134,7 @@ export default function SetupScreen({ onStart }) {
           <div className="toggle-row">
             <div>
               <div className="toggle-label">Timer</div>
-              <div className="toggle-sublabel">Tidsgräns per runda</div>
+              <div className="toggle-sublabel">Tidsgräns per omgång</div>
             </div>
             <label className="toggle-switch">
               <input type="checkbox" checked={useTimer} onChange={e => setUseTimer(e.target.checked)} />
@@ -143,7 +144,7 @@ export default function SetupScreen({ onStart }) {
 
           {useTimer && (
             <div className="timer-extra">
-              <label>Sekunder per runda</label>
+              <label>Sekunder per omgång</label>
               <div className="stepper" style={{ margin: '0 auto' }}>
                 <button className="stepper-btn" onClick={() => setTimerDuration(d => Math.max(5, d - 5))}>−</button>
                 <span className="stepper-value">{timerDuration}</span>

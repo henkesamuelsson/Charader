@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import WelcomeScreen from './components/WelcomeScreen.jsx'
-import SetupScreen from './components/SetupScreen.jsx'
-import PlayArea from './components/PlayArea.jsx'
+import SetupScreen from './components/ffa/SetupScreen.jsx'
+import PlayArea from './components/ffa/PlayArea.jsx'
 import TeamSetupWizard from './components/team/TeamSetupWizard.jsx'
 import TeamPlayArea from './components/team/TeamPlayArea.jsx'
+// import GameOver from './components/ffa/GameOver.jsx'
 
 // view: 'welcome' | 'ffa-setup' | 'ffa-play' | 'team-setup' | 'team-play'
 
@@ -36,7 +37,9 @@ export default function App() {
       )}
 
       {view === 'ffa-setup' && (
-        <SetupScreen onStart={handleFfaStart} />
+        <SetupScreen onStart={handleFfaStart}
+         onBack={() => setView('welcome')}
+        />
       )}
 
       {view === 'ffa-play' && ffaConfig && (

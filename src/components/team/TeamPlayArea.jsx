@@ -13,7 +13,6 @@ function shuffleArray(arr) {
   return a
 }
 
-// Bygg Standard turn-ordning för en omgång: zip-merge av lag, fair-shufflad per lag
 function buildStandardTurnOrder(teams) {
   const maxTurns = Math.max(...teams.map(t => t.players.length))
   const shuffledTeams = teams.map(t => {
@@ -51,14 +50,12 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
 
   const [hotSeatTeamIndex, setHotSeatTeamIndex] = useState(0)
   const [hotSeatCurrentPlayer, setHotSeatCurrentPlayer] = useState(() => nextHotSeatPlayer(0))
-  const [hotSeatNextPlayer, setHotSeatNextPlayer] = useState(null) // för handoff-skärm
+  const [hotSeatNextPlayer, setHotSeatNextPlayer] = useState(null)
 
   // === GEMENSAM STATE ===
   const [teams, setTeams] = useState(initialTeams.map(t => ({ ...t, score: 0 })))
   const [currentCard, setCurrentCard] = useState(null)
-  // phase: 'handoff' | 'playing' | 'card-handoff' | 'penalty' | 'gameover'
-  // card-handoff = mellansteg i hotseat efter rätt/skip innan nästa kort
-  const [phase, setPhase] = useState('handoff')
+  const [phase, setPhase] = useState('handoff') // handoff | playing | card-handoff | penalty | gameover
   const [timeLeft, setTimeLeft] = useState(timerSeconds)
   const [timerRunning, setTimerRunning] = useState(false)
   const timerRef = useRef(null)
@@ -70,7 +67,7 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
     fanfareRef.current = new Audio('/sounds/fanfare.mp3')
   }, [])
 
-  // === TIMER ===
+  // === TIMER – körs alltid, påverkas inte av phase ===
   useEffect(() => {
     if (!timerRunning) return
     timerRef.current = setInterval(() => {
@@ -127,10 +124,8 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
     if (gameMode === 'standard') {
       setCurrentCard(getNextCard())
     } else {
-      // Hot Seat: visa handoff-skärm med nästa spelare innan nytt kort
       const next = nextHotSeatPlayer(hotSeatTeamIndex)
       setHotSeatNextPlayer(next)
-      // stopTimer() <-- Vi testar låta Timer gå hela tiden.
       setPhase('card-handoff')
     }
   }
@@ -144,32 +139,27 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
     setPhase('penalty')
   }
 
-  // === EFTER PENALTY – nästa spelare intar plats ===
   function handlePenaltyDone() {
     if (gameMode === 'hotseat') {
       setPhase('card-handoff')
     } else {
-      setTimerRunning(true)
       setPhase('playing')
       setCurrentCard(getNextCard())
     }
   }
 
-  // === CARD HANDOFF KLAR (hotseat) – ny spelare har intagit plats ===
   function handleCardHandoffReady() {
     setHotSeatCurrentPlayer(hotSeatNextPlayer)
     setHotSeatNextPlayer(null)
-    setTimerRunning(true)
     setPhase('playing')
     setCurrentCard(getNextCard())
   }
 
-  // === ADVANCE TURN (timer slut) ===
+  // === ADVANCE TURN ===
   function advanceTurn() {
     if (gameMode === 'standard') {
       const nextIndex = turnOrderIndex + 1
       if (nextIndex >= turnOrderRef.current.length) {
-        // Omgången klar
         if (currentRound >= roundCount) {
           setPhase('gameover')
           fanfareRef.current?.play().catch(() => {})
@@ -184,7 +174,6 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
         setPhase('handoff')
       }
     } else {
-      // Hot Seat: nästa lag
       const nextTeam = hotSeatTeamIndex + 1
       if (nextTeam >= teams.length) {
         if (currentRound >= roundCount) {
@@ -193,14 +182,12 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
         } else {
           setCurrentRound(r => r + 1)
           setHotSeatTeamIndex(0)
-          const firstPlayer = nextHotSeatPlayer(0)
-          setHotSeatCurrentPlayer(firstPlayer)
+          setHotSeatCurrentPlayer(nextHotSeatPlayer(0))
           setPhase('handoff')
         }
       } else {
         setHotSeatTeamIndex(nextTeam)
-        const firstPlayer = nextHotSeatPlayer(nextTeam)
-        setHotSeatCurrentPlayer(firstPlayer)
+        setHotSeatCurrentPlayer(nextHotSeatPlayer(nextTeam))
         setPhase('handoff')
       }
     }
@@ -213,7 +200,8 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
       if (!current) return { message: 'Spelet är slut!', subMessage: '' }
       return {
         message: `${teams[current.teamIndex]?.name}s tur!`,
-        subMessage: `Charadör: ${current.playerName}`
+        subMessage: `${current.playerName}`
+        // subMessage: `Spelare: ${current.playerName}`
       }
     } else {
       return {
@@ -243,7 +231,12 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
             <button className="btn btn-secondary" onClick={onRestart}>⚙️ Tillbaka till start</button>
           </div>
         </div>
-        <TeamScoreboard teams={teams} currentTeamIndex={-1} />
+        <TeamScoreboard
+          teams={teams}
+          currentTeamIndex={-1}
+          currentRound={roundCount}
+          roundCount={roundCount}
+        />
       </div>
     )
   }
@@ -262,13 +255,13 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
 
   return (
     <div id="play-area">
-      {/* Banner */}
+      {/* Banner – lagnamn + spelarnamn, precis som FFA */}
       <div className="current-player-banner">
-        <span className="turn-label">{teams[activeTeamIndex]?.name} · Omgång {currentRound}/{roundCount}</span>
+        <span className="turn-label">{teams[activeTeamIndex]?.name}</span>
         <span className="player-name-highlight">{activePlayerName}</span>
       </div>
 
-      {/* Timer bar – visas alltid när en tur är aktiv */}
+      {/* Timer bar – alltid synlig under aktiv tur */}
       {['playing', 'card-handoff', 'penalty'].includes(phase) && (
         <div className="team-timer-bar-wrap">
           <div className="team-timer-bar" style={{
@@ -307,7 +300,17 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
       {/* Knappar */}
       {phase === 'playing' && (
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleCorrect}>
+         {/* {----- TESTAR GRÖN/RÖD KNAPPAR -------  */}
+          {/* <button className="btn btn-success" style={{ flex: 2 }} onClick={handleCorrect}>
+            ✓ Rätt!
+          </button>
+          <button className="btn btn-danger" style={{ flex: 1 }} onClick={handleSkip}>
+            Skip
+          </button> */}
+        
+
+        {/* {----- ORIGINAL KNAPPARNA -------  */}
+        <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleCorrect}>  
             ✓ Rätt!
           </button>
           <button className="btn btn-ghost" style={{ flex: 1 }} onClick={handleSkip}>
@@ -316,7 +319,13 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
         </div>
       )}
 
-      <TeamScoreboard teams={teams} currentTeamIndex={activeTeamIndex} />
+      {/* Scoreboard med omgångsbadge */}
+      <TeamScoreboard
+        teams={teams}
+        currentTeamIndex={activeTeamIndex}
+        currentRound={currentRound}
+        roundCount={roundCount}
+      />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
-import { buildCardPool } from '../cards/themes.js'
+import { buildCardPool } from '../../cards/themes.js'
 import Scoreboard from './Scoreboard.jsx'
-import Timer from './Timer.jsx'
+import Timer from '../Timer.jsx'
 import GameOver from './GameOver.jsx'
 
 export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, timerDuration, selectedThemes, onRestart }) {
