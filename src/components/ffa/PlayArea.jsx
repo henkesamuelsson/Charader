@@ -129,7 +129,7 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
       )}
 
       {phase === 'playing' && !awaitingGuess && (
-        <button className="btn btn-secondary" onClick={handleEndRound}>✋ Avsluta runda</button>
+        <button className="btn btn-secondary" onClick={handleEndRound}>✓ Rätt gissat!</button>
       )}
 
       {awaitingGuess && (
