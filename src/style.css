@@ -338,9 +338,7 @@ html, body {
 }
 
 .timer-extra {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+  margin-top: 14px;
   animation: slideIn 0.2s ease;
 }
 
@@ -502,6 +500,47 @@ html, body {
   display: block;
 }
 
+.guess-player-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.guess-player-chip {
+  padding: 10px 16px;
+  border-radius: 50px;
+  border: 2px solid var(--border);
+  background: var(--brand-bg-2);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.guess-player-chip:active {
+  transform: scale(0.97);
+}
+
+.guess-player-chip.selected {
+  border-color: var(--brand);
+  background: var(--brand-bg);
+  color: var(--brand);
+}
+
+.guess-player-none {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+.guess-player-none.selected {
+  border-style: solid;
+  color: var(--brand);
+}
+
 /* Card */
 .card-display {
   background: linear-gradient(135deg, var(--white), var(--brand-bg));
@@ -512,6 +551,7 @@ html, body {
   min-height: 130px;
   display: flex;
   align-items: center;
+  position: relative;
   justify-content: center;
   box-shadow: var(--shadow-lg);
 }
@@ -1057,4 +1097,15 @@ footer {
 
 .sub-chip.selected {
   border-style: solid;
+}
+
+.card-theme-label {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }

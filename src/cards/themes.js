@@ -22,7 +22,6 @@ export const themes = [
     label: 'Blandat',
     emoji: '🎲',
     cards: generalCards,
-    // Inget subcategories-fält = ingen expandering i UI
   },
   {
     id: 'movies',
@@ -52,46 +51,56 @@ export const themes = [
     id: 'kids',
     label: 'Barn',
     emoji: '🧒',
-    // Barn har inga egna kort – bara underkategorier
     cards: [],
     subcategories: [
-      { id: 'kidsAnimals', label: 'Djur',          emoji: '🐘', cards: kidsAnimalsCards },
-      { id: 'kidsFood',    label: 'Mat',            emoji: '🍓', cards: kidsFoodCards },
-      { id: 'kidsSports',  label: 'Sport',          emoji: '⚽', cards: kidsSportsCards },
-      { id: 'kidsHome',    label: 'Saker i hemmet', emoji: '🏠', cards: kidsHomeCards },
+      { id: 'kidsAnimals', label: 'Djur',          parentLabel: 'Barn', emoji: '🐘', cards: kidsAnimalsCards },
+      { id: 'kidsFood',    label: 'Mat',            parentLabel: 'Barn', emoji: '🍓', cards: kidsFoodCards },
+      { id: 'kidsSports',  label: 'Sport',          parentLabel: 'Barn', emoji: '⚽', cards: kidsSportsCards },
+      { id: 'kidsHome',    label: 'Saker i hemmet', parentLabel: 'Barn', emoji: '🏠', cards: kidsHomeCards },
     ],
   },
 ]
 
 // ============================================================
 // Hjälpfunktion: bygg kortlistan från valda teman/underkategorier
-// selectedThemes = Set av id-strängar, t.ex. { 'movies', 'kidsAnimals', 'kidsFood' }
+// Returnerar objekt: { word: "Elefant", theme: "Barn/Djur" }
+// Deduplicerar på word – första träffen vinner (behåller sin kategoritagg)
 // ============================================================
 export function buildCardPool(selectedThemes) {
+  const seen = new Set()
   const pool = []
+
+  function addCards(cards, themeLabel) {
+    for (const word of cards) {
+      if (!seen.has(word)) {
+        seen.add(word)
+        pool.push({ word, theme: themeLabel })
+      }
+    }
+  }
 
   for (const theme of themes) {
     if (theme.subcategories) {
-      // Tema med underkategorier
       const anySubSelected = theme.subcategories.some(s => selectedThemes.has(s.id))
       const themeSelected = selectedThemes.has(theme.id)
 
       if (themeSelected && !anySubSelected) {
         // Hela barn-temat valt utan specifika underkategorier → ta alla
-        theme.subcategories.forEach(s => pool.push(...s.cards))
+        theme.subcategories.forEach(s =>
+          addCards(s.cards, `${s.parentLabel}/${s.label}`)
+        )
       } else {
         // Ta bara valda underkategorier
         theme.subcategories
           .filter(s => selectedThemes.has(s.id))
-          .forEach(s => pool.push(...s.cards))
+          .forEach(s => addCards(s.cards, `${s.parentLabel}/${s.label}`))
       }
     } else {
       if (selectedThemes.has(theme.id)) {
-        pool.push(...theme.cards)
+        addCards(theme.cards, theme.label)
       }
     }
   }
 
-  // Deduplicera
-  return [...new Set(pool)]
+  return pool
 }
