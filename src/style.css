@@ -568,6 +568,18 @@ html, body {
   color: var(--text-muted);
 }
 
+.card-theme-label {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-style:italic;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 /* Guess section */
 .guess-section {
   background: var(--white);
@@ -842,20 +854,27 @@ footer {
   font-size: 1rem;
   color: var(--brand);
 }
-
-.btn-success {
+/* /* --- originalet --- */
+/* .btn-success {
   background: #27ae60;
   color: white;
   box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+} */
+
+.btn-success {
+  background: #0a8f5c;
+  color: white;
+  box-shadow: 0 4px 20px rgba(10, 143, 92, 0.5);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
 
 .btn-success:active {
   transform: scale(0.97);
-  background: #219a52;
+  background: #0a8f5c;
 }
 
 .btn-success:hover {
-  background: #219a52;
+  background: #0a8f5c;
   transform: translateY(-1px);
 }
 
@@ -1097,15 +1116,4 @@ footer {
 
 .sub-chip.selected {
   border-style: solid;
-}
-
-.card-theme-label {
-  position: absolute;
-  bottom: 10px;
-  right: 14px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
 }

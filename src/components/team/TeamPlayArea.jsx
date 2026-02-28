@@ -319,18 +319,18 @@ export default function TeamPlayArea({ gameMode, teams: initialTeams, timerSecon
       {phase === 'playing' && (
         <div style={{ display: 'flex', gap: 10 }}>
           {/* {----- TESTAR GRÖN/RÖD KNAPPAR -------  */}
-          {/* <button className="btn btn-success" style={{ flex: 2 }} onClick={handleCorrect}>
+          <button className="btn btn-success" style={{ flex: 2 }} onClick={handleCorrect}>
             ✓ Rätt!
           </button>
-          <button className="btn btn-danger" style={{ flex: 1 }} onClick={handleSkip}>
+          {/* <button className="btn btn-danger" style={{ flex: 1 }} onClick={handleSkip}>
             Skip
           </button> */}
         
 
         {/* {----- ORIGINAL KNAPPARNA -------  */}
-          <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleCorrect}>
+          {/* <button className="btn btn-primary" style={{ flex: 2 }} onClick={handleCorrect}>
             ✓ Rätt!
-          </button>
+          </button> */}
           <button className="btn btn-ghost" style={{ flex: 1 }} onClick={handleSkip}>
             Skip
           </button>

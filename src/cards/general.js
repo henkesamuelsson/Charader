@@ -1,7 +1,7 @@
 export const cards = [
   "Elefant", "Surfing", "Pizza", "Astronaut", "Regnbåge",
-  "Trollkarl", "Spaghetti", "Fyrverkeri", "Pingvin", "Drakar",
+  "Trollkarl", "Spaghetti", "Fyrverkeri", "Pingvin", "Drake",
   "Fallskärmshoppning", "Koala", "Motorcykel", "Ballong", "Cirkus",
   "Fiskare", "Isberg", "Vulkan", "Hammare", "Spindelnät",
-  "Fyrtorn", "Lasso", "Kompas", "Kikare", "Igloo",
+  "Lasso", "Kikare", "Igloo",
 ]

@@ -129,7 +129,10 @@ export default function PlayArea({ initialPlayers, roundsPerPlayer, useTimer, ti
       )}
 
       {phase === 'playing' && !awaitingGuess && (
-        <button className="btn btn-secondary" onClick={handleEndRound}>✓ Rätt gissat!</button>
+        // <button className="btn btn-secondary" onClick={handleEndRound}>✓ Rätt gissat! → Välj vinnare</button>
+
+        // Testar andra färger på rätt gissat, kopplat med Team-play-Versionen.
+        <button className="btn btn-success" onClick={handleEndRound}>✓ Rätt svar → Välj vinnare</button>
       )}
 
       {awaitingGuess && (
